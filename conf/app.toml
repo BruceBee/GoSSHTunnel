@@ -1,0 +1,19 @@
+[ssh]
+ssh_host = "xx.xx.xx.xx"
+ssh_port = 22
+ssh_user = "root"
+ssh_pkey = "./privateKey/id_rsa"
+ssh_pass = "xxxxx"
+
+[ssh_bind]
+# 远程绑定地址(建立SSH通道后)
+remote_bind_addr = "127.0.0.1"
+
+# 远程绑定端口(建立SSH通道后,指向数据库端口)
+remote_bind_port = 3306
+
+# 本地绑定地址(建立SSH通道后)
+local_bind_addr = "0.0.0.0"
+
+# 本地绑定端口(建立SSH通道后,本地端口，建议与远程绑定端口一致)
+local_bind_port = 3306
