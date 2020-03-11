@@ -53,11 +53,9 @@ func main()  {
 	// Create the Signer for this private key.
 	signer, err := ssh.ParsePrivateKeyWithPassphrase(key, []byte(config.SSH.Pwd))
 	if err != nil {
-		//log.Fatalf("1unable to parse private key: %v", err)
-
 		signer, err = ssh.ParsePrivateKey(key)
 		if err != nil {
-			log.Fatalf("2unable to parse private key: %v", err)
+			log.Fatalf("unable to parse private key: %v", err)
 		}
 	}
 
