@@ -21,9 +21,12 @@ ssh_user = "root" # 登录账号
 ssh_pkey = "./privateKey/id_rsa"  # 确保秘钥文件路径正确
 ssh_pass = "xxxx" # 修改成自己的秘钥密码，没有则为空
 
-
-remote_bind_port = [3306] # 远程绑定端口,多端口的，往后增加即可
-local_bind_port = [3306] # 本地绑定端口，必须与远程绑定端口remote_bind_port一致
+# 绑定端口(建立SSH通道后,指向数据库端口, port1:port2,其中port1代表本地端口，port2代表远程端口)
+bind_port = [
+            [12345, 12345],
+            [22345, 22345],
+            [33345, 33345]
+]
 ```
 
 ###  3、执行即可
