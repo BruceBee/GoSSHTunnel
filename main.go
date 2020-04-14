@@ -30,10 +30,10 @@ type sshConf struct {
 }
 
 type sshBindConf struct {
-	RemotAddr string `toml:"remote_bind_addr"`
-	RemotPort int `toml:"remote_bind_port"`
+	RemoteAddr string `toml:"remote_bind_addr"`
+	RemotePort []int `toml:"remote_bind_port"`
 	LocalAddr string `toml:"local_bind_addr"`
-	LocalPort int `toml:"local_bind_port"`
+	LocalPort []int `toml:"local_bind_port"`
 }
 
 func main()  {
@@ -67,20 +67,31 @@ func main()  {
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
 
-	localAddr := fmt.Sprintf("%s:%s", config.SSH_Bind.LocalAddr, strconv.Itoa(config.SSH_Bind.LocalPort))
+	// Loop local port array
+	for _, p := range config.SSH_Bind.LocalPort {
+		fmt.Print(p)
+		go func(port int) {
+			fmt.Print("run")
 
-	localListener, err := net.Listen("tcp", localAddr)
+			localAddr := fmt.Sprintf("%s:%s", config.SSH_Bind.LocalAddr, strconv.Itoa(port))
+			fmt.Print(localAddr)
 
-	if err != nil {
-		log.Fatalf("net.Listen failed: %v", err)
+			localListener, err := net.Listen("tcp", localAddr)
+
+			if err != nil {
+				log.Fatalf("net.Listen failed: %v", err)
+			}
+
+			for {
+				// Setup localConn (type net.Conn)
+				localConn, err := localListener.Accept()
+				if err != nil {
+					log.Fatalf("listen.Accept failed: %v", err)
+				}
+				fmt.Print("go forward")
+				go forward(localConn, conf, config, port)
+			}
+		}(p)
 	}
-
-	for {
-		// Setup localConn (type net.Conn)
-		localConn, err := localListener.Accept()
-		if err != nil {
-			log.Fatalf("listen.Accept failed: %v", err)
-		}
-		go forward(localConn, conf, config)
-	}
+	select{}
 }
