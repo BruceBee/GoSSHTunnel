@@ -31,9 +31,9 @@ type sshConf struct {
 
 type sshBindConf struct {
 	RemoteAddr string `toml:"remote_bind_addr"`
-	RemotePort []int `toml:"remote_bind_port"`
 	LocalAddr string `toml:"local_bind_addr"`
-	LocalPort []int `toml:"local_bind_port"`
+	BindPort [][]int `toml:"bind_port"`
+
 }
 
 func main()  {
@@ -68,13 +68,10 @@ func main()  {
 	}
 
 	// Loop local port array
-	for _, p := range config.SSH_Bind.LocalPort {
-		fmt.Print(p)
-		go func(port int) {
-			fmt.Print("run")
-
-			localAddr := fmt.Sprintf("%s:%s", config.SSH_Bind.LocalAddr, strconv.Itoa(port))
-			fmt.Print(localAddr)
+	for _, p := range config.SSH_Bind.BindPort {
+		go func(port []int) {
+			localAddr := fmt.Sprintf("%s:%s", config.SSH_Bind.LocalAddr, strconv.Itoa(port[0]))
+			fmt.Print("Listen success: ", localAddr, "\n")
 
 			localListener, err := net.Listen("tcp", localAddr)
 
@@ -88,8 +85,7 @@ func main()  {
 				if err != nil {
 					log.Fatalf("listen.Accept failed: %v", err)
 				}
-				fmt.Print("go forward")
-				go forward(localConn, conf, config, port)
+				go forward(localConn, conf, config, port[1])
 			}
 		}(p)
 	}
