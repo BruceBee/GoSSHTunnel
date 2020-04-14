@@ -16,10 +16,10 @@ import (
 
 
 
-func forward(localConn net.Conn, cliconfig *ssh.ClientConfig, config tomlConf) {
+func forward(localConn net.Conn, cliconfig *ssh.ClientConfig, config tomlConf, port int) {
 
 	sshAddr := fmt.Sprintf("%s:%s", config.SSH.Host, strconv.Itoa(config.SSH.Port))
-	bindAddr := fmt.Sprintf("%s:%s", config.SSH_Bind.RemotAddr, strconv.Itoa(config.SSH_Bind.RemotPort))
+	bindAddr := fmt.Sprintf("%s:%s", config.SSH_Bind.RemoteAddr, strconv.Itoa(port))
 
 	// Setup sshClientConn (type *ssh.ClientConn)
 	sshClientConn, err := ssh.Dial("tcp", sshAddr, cliconfig)
