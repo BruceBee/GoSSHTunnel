@@ -9,11 +9,12 @@ ssh_pass = "xxxxx"
 # 远程绑定地址(建立SSH通道后)
 remote_bind_addr = "127.0.0.1"
 
-# 远程绑定端口(建立SSH通道后,指向数据库端口,多个端口的监听往列表内增加即可)
-remote_bind_port = [3306]
-
 # 本地绑定地址(建立SSH通道后)
 local_bind_addr = "0.0.0.0"
 
-# 本地绑定端口(建立SSH通道后,本地端口，建议与远程绑定端口一致，多端口配置保持与remote_bind_port一致)
-local_bind_port = [3306]
+# 绑定端口(建立SSH通道后,指向数据库端口, port1:port2,其中port1代表本地端口，port2代表远程端口)
+bind_port = [
+            [12345, 12345],
+            [12012, 2012],
+            [13013, 13013]
+]
